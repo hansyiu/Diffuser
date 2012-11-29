@@ -1,0 +1,27 @@
+label {
+  display: block;
+  float: left;
+  width:150px;
+}
+
+body {
+	position:relative;
+
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+#fieldsetbox {
+  -moz-border-radius: 10px; /* Firefox */
+  -webkit-border-radius: 10px; /* Safari, Chrome */
+  border-radius: 10px; /* CSS3 */
+  /*background-color:#FFFF99;*/
+  padding:1em;
+  width:50%;
+
+}
+
+}
+.footer, .push {
+height: 4em;
+}

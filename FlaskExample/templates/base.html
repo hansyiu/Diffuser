@@ -1,0 +1,48 @@
+{% from "statichelpers.html" import static %}
+{%- macro active_if(name) -%}
+  {%- if name in request.view_args %}active{% endif -%}
+{%- endmacro -%}
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- tell IE to use the most modern rendering engine available -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href="{{ static('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ static('css/local/local.css') }}" rel="stylesheet">
+
+    {% block extra_css %}
+    {% endblock extra_css %}
+  </head>
+
+  <body lang="en">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand active" href="#">notifyMe</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class=""><a href="#">info</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        {% block content %}  {% endblock content %}
+    </div> <!-- conent container -->
+
+    <!-- jQuery -->
+    <script src="{{ static('js/jquery/jquery-1.8.1.min.js')}}"></script>
+
+    <!-- bootstrap js -->
+    <script src="{{ static('js/bootstrap/bootstrap.min.js')}}"></script>
+
+    {% block extra_js %}
+    {% endblock extra_js %}
+  </body>
+</html>

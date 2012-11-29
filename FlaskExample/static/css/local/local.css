@@ -1,0 +1,38 @@
+label {
+  display: block;
+  float: left;
+  width:150px;
+}
+
+body {
+	position:relative;
+
+	margin-left: 10%;
+	margin-right: 10%;
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+.input-box {
+ 
+  -moz-border-radius: 10px; /* Firefox */
+  -webkit-border-radius: 10px; /* Safari, Chrome */
+  border-radius: 10px; /* CSS3 */
+  /*background-color:#FFFF99;*/
+  padding:2em;
+  width:90%;
+
+}
+
+.shadow { 
+ /* box shadow */
+  -moz-box-shadow: 3px 3px 4px #606060;
+  -webkit-box-shadow: 3px 3px 4px #606060;
+  box-shadow: 3px 3px 4px #606060;
+
+}
+
+}
+.footer, .push {
+height: 4em;
+}

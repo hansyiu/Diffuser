@@ -1,0 +1,14 @@
+{% extends "base.html" %} 
+
+{% block content %} 
+
+<div class="hero-unit">
+  	<form class="form-search" method='POST'>
+      <p> <h1> Tell me something! </h1> </p>
+<!--       <p> What would you say to a stranger that you have never met before... </p>
+ -->   	  <input type="text" class="input-large search-query" name="input-field">
+   	  <button type="submit" class="btn btn-primary" value='submit'>Send</button>
+   	</form>
+</div>
+
+{% endblock %}

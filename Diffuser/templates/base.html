@@ -13,6 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link href="{{ static('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ static('css/local/local.css') }}" rel="stylesheet">
+    <script src="{{ static('js/jquery/jquery-1.8.1.min.js')}}"></script>
+    <script src="{{ static('js/bootstrap/bootstrap.min.js')}}"></script>
+    <script src="{{ static('js/heatmap/heatmap.js')}}"></script>
 
     {% block extra_css %}
     {% endblock extra_css %}
@@ -22,7 +25,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand active" href="#">notifyMe</a>
+          <a class="brand active" href="#">The Diffuser</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class=""><a href="#">info</a></li>
@@ -36,12 +39,7 @@
         {% block content %}  {% endblock content %}
     </div> <!-- conent container -->
 
-    <!-- jQuery -->
-    <script src="{{ static('js/jquery/jquery-1.8.1.min.js')}}"></script>
-
-    <!-- bootstrap js -->
-    <script src="{{ static('js/bootstrap/bootstrap.min.js')}}"></script>
-
+    
     {% block extra_js %}
     {% endblock extra_js %}
   </body>

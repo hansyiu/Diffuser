@@ -2,13 +2,77 @@
 
 {% block content %} 
 
+<!--
 <div class="hero-unit">
   	<form class="form-search" method='POST'>
       <p> <h1> Tell me something! </h1> </p>
-<!--       <p> What would you say to a stranger that you have never met before... </p>
- -->   	  <input type="text" class="input-large search-query" name="input-field">
+       <p> What would you say to a stranger that you have never met before... </p>
+   	  <input type="text" class="input-large search-query" name="input-field">
    	  <button type="submit" class="btn btn-primary" value='submit'>Send</button>
    	</form>
 </div>
+-->
+
+<div class="row">
+	<div class="span12">
+		<div id="heatmapArea" class="well heatmap" style="width:940px;padding:0;height:400px;cursor:pointer;position:relative;">
+	</div>
+</div>
+
+<div class="row">
+	<div class="span12"> 
+		<button class="btn btn-primary pull-right"> Start Diffusion </button>
+	</div>
+</div>
+
+<script type="text/javascript"> 
+    
+    // heatmap configuration
+    var config = {
+        element: document.getElementById("heatmapArea"),
+        radius: 20,
+        opacity: 50,
+        legend: {
+            position: 'br',
+            title: 'Example Distribution'
+        }   
+    };
+    
+    //creates and initializes the heatmap
+    var heatmap = h337.create(config);
+ 
+
+    var isDragging = false;
+	$("#heatmapArea > canvas").mousedown(function(e) {
+        heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
+
+	    $("#heatmapArea > canvas").mousemove(function(e) {
+	    	console.log(e)
+	        isDragging = true;
+	        $(window).unbind("mousemove");
+	        heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
+
+	    });
+	})
+	$("#heatmapArea > canvas").mouseup(function() {
+	    var wasDragging = isDragging;
+	    isDragging = false;
+	    $("#heatmapArea > canvas").unbind("mousemove");
+	    
+	});
+
+	var can = $("#heatmap > canvas");
+	var ctx = $("#heatmapArea > canvas")[0].getContext("2d");
+	var pixelData = ctx.getImageData(0, 0,  can.width(), can.height());
+
+    //$("#heatmapArea > canvas").mousemove(function(e){
+    // 	console.log(e, e.offsetX, e.offestY)
+    //    // layerX and layerY is deprecated and will be removed,
+    //    // use another way of determining the x and y position in an element
+    //    heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
+    //});
+
+</script>
+
 
 {% endblock %}

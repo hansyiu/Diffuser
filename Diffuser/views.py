@@ -1,4 +1,4 @@
-from FlaskExample import app
+from Diffuser import app
 from flask import (request, url_for, redirect, render_template, flash,
                    session, g, json, Blueprint, make_response, Flask)
 

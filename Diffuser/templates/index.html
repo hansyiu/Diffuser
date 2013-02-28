@@ -15,13 +15,15 @@
 
 <div class="row">
 	<div class="span12">
-		<div id="heatmapArea" class="well heatmap" style="width:940px;padding:0;height:400px;cursor:pointer;position:relative;">
+		<div id="heatmapArea" class="well heatmap" style="width:940px;padding:0;height:400px;cursor:pointer;position:relative;"></div>
 	</div>
 </div>
 
 <div class="row">
 	<div class="span12"> 
-		<button class="btn btn-primary pull-right"> Start Diffusion </button>
+		<button id="start_button" class="btn btn-primary pull-right"> Start Diffusion </button>
+		<button id="clear_button" class="btn btn-primary pull-right"> Clear Drawing </button>
+		<input  id="counter_box" class="pull-left input-small" type="text" width="4" readonly>
 	</div>
 </div>
 
@@ -47,7 +49,6 @@
         heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
 
 	    $("#heatmapArea > canvas").mousemove(function(e) {
-	    	console.log(e)
 	        isDragging = true;
 	        $(window).unbind("mousemove");
 	        heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
@@ -61,9 +62,59 @@
 	    
 	});
 
-	var can = $("#heatmap > canvas");
-	var ctx = $("#heatmapArea > canvas")[0].getContext("2d");
-	var pixelData = ctx.getImageData(0, 0,  can.width(), can.height());
+	// var can = $("#heatmap > canvas");
+	// var ctx = $("#heatmapArea > canvas")[0].getContext("2d");
+	// var pixelData = ctx.getImageData(0, 0,  can.width(), can.height());
+
+	var arrayFromImageData = function(imdata, width, height) {
+		var arr = [[]];
+		pos = 0;
+		for (y=0; y<height; y++) {
+			temp = new Array();
+			for (x=0; x<width; x++) {
+				r = imdata[pos++];
+				g = imdata[pos++];
+				b = imdata[pos++];
+				a = imdata[pos++];
+				val = (r+g+b)/3.0;
+				temp.push(val);
+
+			}
+			arr[y] = temp;
+		}
+		return arr;
+	}
+
+
+	var imageDataFromArray = function(arr) {
+		var tempdata = [];
+		var height = arr.length;
+		var width = arr[1].length;
+		for (y=0; y<height; y++ ){
+			for (x=0; x<width; x++){
+				tempdata.push(arr[y][x] * 3.0);
+				tempdata.push(arr[y][x] * 3.0);
+				tempdata.push(arr[y][x] * 3.0);
+				tempdata.push(config.opacity /100 * 255);
+			}
+		}
+		return tempdata;
+	}
+
+	$("#start_button").click(function() {
+		console.log("clicked that start button")
+		console.log(heatmap)
+		ctx = heatmap.get("ctx")
+		can = $("#heatmapArea > canvas")
+		imageData = ctx.getImageData(0, 0, can.width(), can.height() )
+ 
+
+	});
+
+	$("#clear_button").click(function() {
+		console.log("clicked that clear button")
+		heatmap.clear()
+	});
 
     //$("#heatmapArea > canvas").mousemove(function(e){
     // 	console.log(e, e.offsetX, e.offestY)

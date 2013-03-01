@@ -49,70 +49,178 @@
         heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
 
 	    $("#heatmapArea > canvas").mousemove(function(e) {
-	        isDragging = true;
+            isDragging = true;
 	        $(window).unbind("mousemove");
 	        heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
 
 	    });
 	})
 	$("#heatmapArea > canvas").mouseup(function() {
-	    var wasDragging = isDragging;
-	    isDragging = false;
-	    $("#heatmapArea > canvas").unbind("mousemove");
+        var wasDragging = isDragging;
+        isDragging = false;
+        $("#heatmapArea > canvas").unbind("mousemove");
 	    
 	});
 
-	// var can = $("#heatmap > canvas");
-	// var ctx = $("#heatmapArea > canvas")[0].getContext("2d");
-	// var pixelData = ctx.getImageData(0, 0,  can.width(), can.height());
+    // var can = $("#heatmap > canvas");
+    // var ctx = $("#heatmapArea > canvas")[0].getContext("2d");
+    // var pixelData = ctx.getImageData(0, 0,  can.width(), can.height());
 
 	var arrayFromImageData = function(imdata, width, height) {
-		var arr = [[]];
-		pos = 0;
-		for (y=0; y<height; y++) {
-			temp = new Array();
-			for (x=0; x<width; x++) {
-				r = imdata[pos++];
-				g = imdata[pos++];
-				b = imdata[pos++];
-				a = imdata[pos++];
-				val = (r+g+b)/3.0;
-				temp.push(val);
+        var arr = [[]];
+        pos = 0;
+        for (y=0; y<height; y++) {
+            temp = new Array();
+            for (x=0; x<width; x++) {
+                r = imdata[pos++];
+                g = imdata[pos++];
+                b = imdata[pos++];
+                a = imdata[pos++];
+                val = (r + g + b) / 3.0;
+                temp.push(val);
 
-			}
-			arr[y] = temp;
-		}
-		return arr;
+            }
+            arr[y] = temp;
+        }
+        return arr;
 	}
 
+    var sum = function(arr) { 
+        total = 0.0
+        for (i=0; i<arr.length; i++) {
+            total += arr[i]
+        }
+        return total;
+    }
+
+    var arrDifference = function(arr1, arr2) { 
+        var diff = []
+        for (i=0; i<arr1.length; i++) {
+            diff[i] = arr1[i] - arr2[i]
+        }
+        delta = sum(diff)
+        return delta
+    }
 
 	var imageDataFromArray = function(arr) {
+        //console.log("imageDataFromArray", arr, arr.length, arr[1].length)
 		var tempdata = [];
 		var height = arr.length;
 		var width = arr[1].length;
 		for (y=0; y<height; y++ ){
 			for (x=0; x<width; x++){
-				tempdata.push(arr[y][x] * 3.0);
-				tempdata.push(arr[y][x] * 3.0);
-				tempdata.push(arr[y][x] * 3.0);
+				tempdata.push(arr[y][x]);
+				tempdata.push(arr[y][x]);
+				tempdata.push(arr[y][x]);
 				tempdata.push(config.opacity /100 * 255);
+                //tempdata.push(255);
 			}
 		}
 		return tempdata;
-	}
+	};
 
+    var getColor = function(v, vmin, vmax) {
+        if (v < vmin) {
+            v = vmin;
+        }
+        if (v > vmax) {
+            v = vmax;
+        }
+        dv = vmax - vmin;
+        var r = 1.0;
+        var g = 1.0;
+        var b = 1.0;
+        if (v < (vmin + 0.25 * dv)) {
+            r = 0;
+            g = 4 * (v - vmin) / dv;
+        } else if (v < (vmin + 0.5 * dv)) {
+            r = 0;
+            b = 1 + 4 * (vmin + 0.25 * dv - v) / dv;
+        } else if (v < (vmin + 0.75 * dv)) {
+            r = 4 * (v - vmin - 0.5 * dv) / dv;
+            b = 0;
+        } else {
+            g = 1 + 4 * (vmin + 0.75 * dv - v) / dv;
+            b = 0;
+           }
+
+   return Array(r*255, g*255, b*255);
+
+    }
+
+    var finiteDifference = function(arr) {
+        //arr should be a 2-d array, such as what is returned from
+        // arrayFromImageData
+        //console.log("input arr", arr)
+
+        //jQuery extend is really weird
+        soln = $.extend(true, [], arr) 
+
+        //soln = JSON.parse(JSON.stringify(imageArray))
+        //console.log("soln before", soln)
+        var width = soln[0].length;
+        var height = soln.length;
+        for (y=1; y<height-1; y++) {
+            for (x=1; x<width-1; x++) {
+                soln[y][x] = arr[y][x] + (arr[y+1][x] - 2*arr[y][x] + arr[y-1][x])  + (arr[y][x+1] - 2*arr[y][x] + arr[y][x-1])
+
+            }
+        }
+        //console.log("soln after", soln)
+        return soln;
+    };
+
+    var setCounter = function(i) {
+        $("#counter_box").val(i)
+    }
+
+    //nClicks =0 
+    var interval = null;
 	$("#start_button").click(function() {
-		console.log("clicked that start button")
-		console.log(heatmap)
-		ctx = heatmap.get("ctx")
-		can = $("#heatmapArea > canvas")
-		imageData = ctx.getImageData(0, 0, can.width(), can.height() )
- 
+		ctx = heatmap.get("ctx");
+		can = $("#heatmapArea > canvas");
+		imageData = ctx.getImageData(0, 0, can.width(), can.height() );
+        originalData = imageData.data
+        newImageData = ctx.createImageData(can.width(), can.height() );
+ 		imageArray = arrayFromImageData(imageData.data, imageData.width, imageData.height);
+        
+        updatedArray = $.extend(true, [], imageArray)
+        for (i=1; i<101; i++){
+            interval = setTimeout(function(i){
+            console.log("iteration=",i);
+            //setTimeout(function(){setCounter(i)},  1000)
+            updatedArray = finiteDifference(updatedArray);
+            newImageDataArray = imageDataFromArray(updatedArray);
+            
+
+            //update the pixels vals in the newImageData object. Have to loop over them, 
+            // b/c for some reason that attr is readonly. 
+            for (k=0; k<newImageDataArray.length; k++){
+                newImageData.data[k] = newImageDataArray[k];
+            }
+
+            ctx.putImageData(newImageData, 0, 0);
+            //console.log(newImageDataArray,  newImageData)
+            $("#counter_box").val(i);
+            //diff1 = arrDifference(originalData, imageData.data);
+            //diff2 = arrDifference(originalData, newImageDataArray);
+            //console.log("diff1=", diff1);
+            //console.log("diff2=", diff2);
+
+            }, 1, i);
+
+        }
+        //newImageData.data = newImageDataArray;
+        //imageData.data = newImageDataArray;
+        //console.log("newImageData", newImageData);
+        //nClicks++;
+        //$("#counter_box").val(nClicks);
 
 	});
 
 	$("#clear_button").click(function() {
 		console.log("clicked that clear button")
+        $("#counter_box").val(0)
 		heatmap.clear()
 	});
 

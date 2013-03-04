@@ -13,7 +13,7 @@ body {
   padding-bottom: 40px;
 }
 
-#counter_box {
+.status-box {
  
   /*-moz-border-radius: 10px; /* Firefox */*/
   /*-webkit-border-radius: 10px; /* Safari, Chrome */*/
@@ -28,6 +28,10 @@ body {
   text-align: center;
 
 
+}
+
+.push-down {
+  min-height: 50px;
 }
 
 .shadow { 

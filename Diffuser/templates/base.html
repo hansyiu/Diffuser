@@ -22,19 +22,42 @@
   </head>
 
   <body lang="en">
+
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand active" href="#">The Diffuser</a>
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class=""><a href="#">info</a></li>
+              <li><a href="#"><img src="{{static( 'img/logo.png')}}" width="250px"></a> </li>
+              <li><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
+    <div class="push-down"></div>
+   <!--  
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <img src="{{static( 'img/logo.png')}}" width="200px"></img>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class=""><a href="#">info</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
     <div class="container">
         {% block content %}  {% endblock content %}
     </div> <!-- conent container -->

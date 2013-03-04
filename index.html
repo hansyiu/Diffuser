@@ -56,7 +56,7 @@
                     <input  id="mean_box" class="pull-left input-small status-box" type="text" width="4" readonly> 
                 </label>
                 <label for="iterations_box"> Total iterations: 
-                    <input  id="iterations_box" class="pull-right input-small status-box" type="text" width="4" value="250"> 
+                    <input  id="iterations_box" class="pull-right input-small status-box" type="number" width="4" value="250"> 
                 </label>
           </div>
         </div>
@@ -268,13 +268,13 @@
         $("#start_button").click(function() {
             ctx = heatmap.get("ctx");
             can = $("#heatmapArea > canvas");
-            var numIter = $("#iterations_box").val()
+            var numIter = parseInt($("#iterations_box").val())
             imageData = ctx.getImageData(0, 0, can.width(), can.height() );
             originalData = imageData.data
             newImageData = ctx.createImageData(can.width(), can.height() );
             imageArray = arrayFromImageData(imageData.data, imageData.width, imageData.height);
             updatedArray = $.extend(true, [], imageArray)
-            for (i=1; i<numIter; i++){
+            for (i=1; i<numIter+1; i++){
                 interval = setTimeout(function(i){
                     console.log("iteration=",i);
                     updatedArray = finiteDifference(updatedArray);

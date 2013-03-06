@@ -38,16 +38,25 @@
 
   <div class="container">
 
-  <div class="row">
-    <div class="span6">
-      <div id="heatmapAreaLeft" class="well heatmap"></div>
-    </div>
-    <div class="span6">
-      <div id="heatmapAreaRight" class="well heatmap">
-        <canvas id="results_canvas" width="440" height="440" style="position:absolute;top:0px;left:0px;"></canvas>
+    <div class="row"> 
+      <div class="span6 centered">
+         <h3> Draw Here </h3>
+      </div>
+      <div class="span6 centered">
+        <h3> Results </h3>
       </div>
     </div>
-  </div>
+
+    <div class="row">
+      <div class="span6">
+        <div id="heatmapAreaLeft" class="well heatmap"></div>
+      </div>
+      <div class="span6">
+        <div id="heatmapAreaRight" class="well heatmap">
+          <canvas id="results_canvas" width="440" height="440" style="position:absolute;top:0px;left:0px;"></canvas>
+        </div>
+      </div>
+    </div>
 
       <div class="row">
         <div class="span12 form-inline"> 
@@ -64,7 +73,7 @@
                   <input  id="avg_time_box" class="pull-left input-small status-box" type="text" width="4" readonly> 
               </label>
                <label for="iterations_box"> Total iterations: 
-                  <input  id="iterations_box" class="pull-right input-small status-box" type="number" width="4" value="250"> 
+                  <input  id="iterations_box" class="pull-left input-small status-box" type="number" width="4" value="500"> 
               </label>
         </div>
       </div>
@@ -90,10 +99,11 @@
 
   var isDragging = false;
   $("#heatmapAreaLeft > canvas").mousedown(function(e) {
-      heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
-
+    //if (e.offsetX )
+    console.log(e.offsetX, e.offsetY, e.layerX, e.layerY)
+    heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
     $("#heatmapAreaLeft > canvas").mousemove(function(e) {
-          isDragging = true;
+        isDragging = true;
         $(window).unbind("mousemove");
         heatmap.store.addDataPoint(e.offsetX, e.offsetY, 1);
 
@@ -285,7 +295,7 @@
               updatedArray = finiteDifference(updatedArray);
 
               //only update the image every 10 iterations, drawing is expensive
-              if (i % 10 == 0) {
+              if (i % 10 == 0 || i==1) {
                   thisMean = mean2d(updatedArray);
                   newImageDataArray = imageDataFromArray(updatedArray);
                   //update the pixels vals in the newImageData object. Have to loop over them, 

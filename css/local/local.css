@@ -60,3 +60,8 @@ height: 4em;
   position:relative;
   border: 1px solid;
 }
+
+.centered {
+  text-align: center;
+  
+}
